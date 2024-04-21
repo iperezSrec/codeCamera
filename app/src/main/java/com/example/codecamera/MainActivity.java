@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder enteredCode = new StringBuilder();
     private ImageView[] dots;
     private DatabaseHelper databaseHelper;
+
+    private TextView textViewForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,19 @@ public class MainActivity extends AppCompatActivity {
         dots[6] = findViewById(R.id.dot7);
         dots[7] = findViewById(R.id.dot8);
         dots[8] = findViewById(R.id.dot9);
+        textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
+
+        // Agregar OnClickListener al textViewForgotPassword
+        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Abrir la actividad activity_noti_contra
+                Intent intent = new Intent(MainActivity.this, notiContra.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     public void onDigitButtonClick(View view) {
         if (enteredCode.length() < 9) {
