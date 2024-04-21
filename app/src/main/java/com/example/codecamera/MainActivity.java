@@ -1,23 +1,22 @@
 package com.example.codecamera;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String CORRECT_CODE = "111111111"; // Código de acceso correcto de 9 caracteres
     private StringBuilder enteredCode = new StringBuilder();
-
     private ImageView[] dots;
-
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +24,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         databaseHelper = new DatabaseHelper(this, "trabajadores.db", 1);
-
-        try {
-            databaseHelper.CheckDatabase();
-        } catch (Exception e) {
-        }
-        try {
-            databaseHelper.OpenDatabase();
-        } catch (Exception e) {
-        }
 
         // Obtener referencias a los indicadores circulares
         dots = new ImageView[9]; // Ajustar a 9 indicadores
@@ -46,19 +36,6 @@ public class MainActivity extends AppCompatActivity {
         dots[6] = findViewById(R.id.dot7);
         dots[7] = findViewById(R.id.dot8);
         dots[8] = findViewById(R.id.dot9);
-
-        // Referenciar el TextView de "¿Olvidaste tu contraseña de acceso?"
-        TextView textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
-
-        // Configurar listener para el TextView de "¿Olvidaste tu contraseña?"
-        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Iniciar la nueva actividad ForgotPasswordActivity
-                Intent intent = new Intent(MainActivity.this, notiContra.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public void onDigitButtonClick(View view) {
@@ -84,24 +61,58 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (enteredCode.length() == 9) {
-            // Verificar el código ingresado
-            if (enteredCode.toString().equals(CORRECT_CODE)) {
+            // Verificar el código ingresado consultando la base de datos
+            String phId = enteredCode.toString();
+            if (isValidCode(phId)) {
                 // Código correcto, desbloquear la aplicación
-                Toast.makeText(this, "¡Desbloqueado!", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(this, Confirmacion.class);
-                startActivity(intent);
-
-                // Limpiar el código después de intentar desbloquear
-                enteredCode.setLength(0);
-                updateIndicators();
+                showConfirmationScreen(phId);
             } else {
                 // Código incorrecto, restablecer indicadores (círculos vacíos)
-                enteredCode.setLength(0);
-                updateIndicators();
                 Toast.makeText(this, "Código incorrecto", Toast.LENGTH_SHORT).show();
             }
+            // Limpiar el código después de intentar desbloquear
+            enteredCode.setLength(0);
+            updateIndicators();
         }
+    }
 
+    private boolean isValidCode(String phId) {
+        // Consultar la base de datos para verificar si phId está en trabajadores.phId
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        String[] columns = {"phId"};
+        String selection = "phId = ?";
+        String[] selectionArgs = {phId};
+        Cursor cursor = db.query("usuarios", columns, selection, selectionArgs, null, null, null);
+        boolean isValid = cursor.getCount() > 0;
+        cursor.close();
+        return isValid;
+    }
+
+    private void showConfirmationScreen(String phId) {
+        // Obtener el nombre correspondiente a phId desde la base de datos
+        String name = getNameFromDatabase(phId);
+
+        // Iniciar la actividad Confirmacion y pasar el nombre como extra
+        Intent intent = new Intent(this, Confirmacion.class);
+        intent.putExtra("NAME", name);
+        startActivity(intent);
+    }
+
+    @SuppressLint("Range")
+    private String getNameFromDatabase(String phId) {
+        // Consultar la base de datos para obtener el nombre asociado a phId
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        String[] columns = {"name"};
+        String selection = "phId = ?";
+        String[] selectionArgs = {phId};
+        Cursor cursor = db.query("usuarios", columns, selection, selectionArgs, null, null, null);
+        String name = "";
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(cursor.getColumnIndex("name"));
+        }
+        cursor.close();
+        return name;
     }
 }
+
+

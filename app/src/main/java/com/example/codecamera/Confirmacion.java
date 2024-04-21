@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
@@ -31,6 +32,13 @@ public class Confirmacion extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmacion);
+
+        // Obtener el nombre pasado como extra desde MainActivity
+        String name = getIntent().getStringExtra("NAME");
+
+        // Actualizar el texto del TextView con el nombre correspondiente
+        TextView textViewQuestion = findViewById(R.id.textViewQuestion);
+        textViewQuestion.setText("¿Es usted " + name + "?");
     }
 
     public void onYesClicked(View view) {
