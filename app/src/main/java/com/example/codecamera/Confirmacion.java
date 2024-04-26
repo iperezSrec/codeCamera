@@ -1,23 +1,27 @@
 package com.example.codecamera;
+
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -38,7 +42,22 @@ public class Confirmacion extends AppCompatActivity {
 
         // Actualizar el texto del TextView con el nombre correspondiente
         TextView textViewQuestion = findViewById(R.id.textViewQuestion);
-        textViewQuestion.setText("¿Es usted " + name + "?");
+        textViewQuestion.setText("¿Eres " + name + "?");
+
+        // Configurar el OnClickListener para el botón de configuración
+        ImageButton buttonConfiguration = findViewById(R.id.buttonConfiguration);
+        buttonConfiguration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Mostrar la ventana modal de configuración
+                showConfigurationDialog();
+            }
+        });
+    }
+
+    private void showConfigurationDialog() {
+        ConfigurationDialogFragment dialogFragment = new ConfigurationDialogFragment();
+        dialogFragment.show(getSupportFragmentManager(), "ConfigurationDialogFragment");
     }
 
     public void onYesClicked(View view) {
@@ -89,6 +108,13 @@ public class Confirmacion extends AppCompatActivity {
 
             // Guardar la imagen en el almacenamiento externo
             saveImageToExternalStorage(imageBitmap);
+
+            // Guardar la imagen en formato base64 en la ubicación interna
+            saveImageAsBase64(imageBitmap);
+
+            // Abrir la actividad 'activity_resultado'
+            Intent resultadoIntent = new Intent(this, Resultado.class);
+            startActivity(resultadoIntent);
         }
     }
 
@@ -100,10 +126,12 @@ public class Confirmacion extends AppCompatActivity {
         File imageFile = new File(storageDir, imageFileName);
 
         try {
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             imageBitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream);
-            outputStream.flush();
-            outputStream.close();
+
+            FileOutputStream fileOutput = new FileOutputStream(imageFile);
+            fileOutput.write(outputStream.toByteArray());
+            fileOutput.close();
 
             // Escanear la imagen para que aparezca en la galería
             MediaStore.Images.Media.insertImage(getContentResolver(),
@@ -115,4 +143,35 @@ public class Confirmacion extends AppCompatActivity {
             Toast.makeText(this, "Error al guardar la imagen", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void saveImageAsBase64(Bitmap imageBitmap) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + ".jpg";
+
+        // Guardar la imagen en formato base64
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        String base64Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+        // Guardar la imagen base64 en el directorio especificado
+        String dbPath = "/data/data/" + getPackageName() + "/pictures/";
+        File dbDir = new File(dbPath);
+        if (!dbDir.exists()) {
+            dbDir.mkdirs(); // Crea el directorio si no existe
+        }
+        File imageFile = new File(dbDir, imageFileName);
+
+        try {
+            FileWriter writer = new FileWriter(imageFile);
+            writer.write(base64Image);
+            writer.flush();
+            writer.close();
+            Toast.makeText(this, "Imagen guardada en " + imageFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al guardar la imagen en formato base64", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+

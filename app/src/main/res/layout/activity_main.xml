@@ -1,103 +1,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@android:color/white">
 
-    <!-- Logo ImageView -->
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="179dp"
-        android:layout_height="124dp"
-        android:src="@drawable/descarga"
-        app:layout_constraintBottom_toTopOf="@id/textViewMessage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- Indicator Container LinearLayout -->
-    <LinearLayout
-        android:id="@+id/indicatorContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/textViewMessage"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
-        android:gravity="center">
-
-        <!-- Primeros 6 indicadores -->
-        <ImageView
-            android:id="@+id/dot1"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot3"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot4"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot5"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot6"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <!-- Indicadores adicionales (7, 8, 9) -->
-        <ImageView
-            android:id="@+id/dot7"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot8"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/circle_empty" />
-
-        <ImageView
-            android:id="@+id/dot9"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/circle_empty" />
-
-    </LinearLayout>
-
+<!-- Logo ImageView -->
+<ImageView
+    android:id="@+id/logo"
+    android:layout_width="179dp"
+    android:layout_height="124dp"
+    android:src="@drawable/logo"
+    app:layout_constraintBottom_toTopOf="@id/textViewMessage"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/textViewMessage"
@@ -105,207 +23,286 @@
         android:layout_height="wrap_content"
         android:text="Ingrese el código de acceso:"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
+        android:textSize="30sp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@id/indicatorContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
+<!-- Indicator Container LinearLayout -->
+<LinearLayout
+    android:id="@+id/indicatorContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    app:layout_constraintBottom_toTopOf="@id/textViewForgotPassword"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginBottom="16dp">
 
-    <!-- Forgot Password TextView -->
-    <TextView
-        android:id="@+id/textViewForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="¿Olvidaste tu contraseña?"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@id/indicatorContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+    <!-- Primeros 6 indicadores -->
+    <ImageView
+        android:id="@+id/dot1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
 
-    <!-- RelativeLayout para el GridLayout -->
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/dot2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot4"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot5"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot6"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <!-- Indicadores adicionales (7, 8, 9) -->
+    <ImageView
+        android:id="@+id/dot7"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot8"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/circle_empty" />
+
+    <ImageView
+        android:id="@+id/dot9"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/circle_empty" />
+
+</LinearLayout>
+
+
+<!-- Forgot Password TextView -->
+<TextView
+    android:id="@+id/textViewForgotPassword"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="¿Olvidaste tu contraseña?"
+    android:textColor="@android:color/darker_gray"
+    android:textSize="15dp"
+    app:layout_constraintTop_toBottomOf="@id/indicatorContainer"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:gravity="center"
+    android:layout_marginBottom="50dp"/>
+
+<!-- RelativeLayout para el GridLayout -->
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/textViewForgotPassword">
+
+    <!-- Keyboard GridLayout -->
+    <GridLayout
+        android:id="@+id/keyboardGrid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewForgotPassword">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:columnCount="3"
+        android:rowCount="4">
 
-        <!-- Keyboard GridLayout -->
-        <GridLayout
-            android:id="@+id/keyboardGrid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:columnCount="3"
-            android:rowCount="4">
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="4dp"
+            android:layout_height="75dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="3"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn3"
-                android:layout_width="4dp"
-                android:layout_height="60dp"
-                android:layout_row="0"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="3"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="4"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn4"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="4"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn5"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="5"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn5"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="5"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn6"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="6"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn6"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="1"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="6"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn7"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="7"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn7"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="2"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="7"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn8"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="8"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn8"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="2"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="8"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
-
-            <Button
-                android:id="@+id/btn9"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="2"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="9"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn9"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="2"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="9"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
 
-            <Button
-                android:id="@+id/btn2"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="2"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="2"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn0"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="3"
-                android:layout_column="1"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="0"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn0"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="0"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <ImageButton
-                android:id="@+id/btnClear"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="3"
-                android:layout_column="2"
-                android:layout_columnWeight="1"
-                android:adjustViewBounds="true"
-                android:background="@drawable/button_background"
-                android:onClick="onClearButtonClick"
-                android:paddingVertical="16dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/image"
-                android:textColor="@color/black"
-                android:textSize="24sp" />
+        <ImageButton
+            android:id="@+id/btnClear"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="3"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:adjustViewBounds="true"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onClearButtonClick"
+            android:paddingVertical="16dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bin"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
 
-            <ImageView
-                android:id="@+id/btn"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="3"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <ImageView
+            android:id="@+id/btn"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
-            <Button
-                android:id="@+id/btn1"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_columnWeight="1"
-                android:background="@drawable/button_background"
-                android:onClick="onDigitButtonClick"
-                android:text="1"
-                android:textColor="@color/black"
-                android:textSize="30sp" />
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:background="@drawable/grid_buttons_background"
+            android:onClick="onDigitButtonClick"
+            android:text="1"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
 
 
-        </GridLayout>
-    </RelativeLayout>
+    </GridLayout>
+</RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fondo de la forma -->
+    <item android:drawable="@drawable/maletasalir" />
+
+    <!-- Borde -->
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="5dp"
+                android:color="@color/sinvad" />
+        </shape>
+    </item>
+</layer-list>

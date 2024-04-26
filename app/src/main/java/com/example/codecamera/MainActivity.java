@@ -1,7 +1,9 @@
 package com.example.codecamera;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.codecamera.db.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,6 +108,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showConfirmationScreen(String phId) {
+        // Guardar phId en SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("phId", phId);
+        editor.apply();
+
         // Obtener el nombre correspondiente a phId desde la base de datos
         String name = getNameFromDatabase(phId);
 
@@ -112,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("NAME", name);
         startActivity(intent);
     }
+
 
     @SuppressLint("Range")
     private String getNameFromDatabase(String phId) {

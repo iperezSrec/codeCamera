@@ -1,4 +1,4 @@
-package com.example.codecamera;
+package com.example.codecamera.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
