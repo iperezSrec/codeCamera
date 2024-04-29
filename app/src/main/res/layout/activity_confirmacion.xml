@@ -22,7 +22,7 @@
         android:id="@+id/textViewSaludo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Holaa !!"
+        android:text="Hola !"
         android:textSize="80dp"
         android:textColor="@color/sinvad"
         android:fontFamily="@font/font_tittle"
@@ -137,7 +137,7 @@
                 android:text=" SOY YO "
                 android:textSize="50dp"
                 android:textAlignment="center"
-                android:paddingTop="10dp"
+                android:paddingTop="15dp"
                 android:fontFamily="@font/font_tittle"
                 android:textColor="@color/white"/>
 
@@ -149,7 +149,7 @@
                 android:src="@drawable/camera"
                 android:background="@android:color/transparent"
                 android:onClick="onYesClicked"
-                android:padding="5dp"/>
+                android:paddingVertical="5dp"/>
 
 
 

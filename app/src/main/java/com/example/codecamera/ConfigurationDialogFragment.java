@@ -190,7 +190,7 @@ public class ConfigurationDialogFragment extends DialogFragment {
     }
 
     private boolean isValidButtonText(String text) {
-        return text.equals("Fichar") || text.equals("Desfichar") || text.equals("Entrada");
+        return text.equals("Inicio") || text.equals("Parada") || text.equals("Entrada");
     }
 }
 

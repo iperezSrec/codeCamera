@@ -9,13 +9,8 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.codecamera.api.ApiUser;
-import com.example.codecamera.api.FicharRequest;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,18 +18,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.codecamera.api.CommandRequest;
+import com.example.codecamera.api.CommandService;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class Resultado extends AppCompatActivity {
-
-
-    // Crear una instancia de Retrofit
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://client.pre.srec.solutions/v1/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    // Crear una instancia de ApiUser utilizando Retrofit
-    ApiUser apiUser = retrofit.create(ApiUser.class);
 
 
     @Override
@@ -70,10 +63,49 @@ public class Resultado extends AppCompatActivity {
                 // Otros atributos de texto que quieras establecer
             }
             buttonEntrada.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Iniciar MainActivity al hacer clic en el botón "Desfichar"
-                    Intent intent = new Intent(Resultado.this, MainActivity.class);
+                    @Override
+                    public void onClick(View v) {
+                        // Aquí colocas el código de la consulta
+
+                        // Obtener la fecha y hora actual
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                        String timestamp = sdf.format(new Date());
+
+                        // Crear el objeto CommandRequest con los datos necesarios
+                        CommandRequest request = new CommandRequest("entrada", "Test", timestamp);
+
+                        // Crear una instancia de Retrofit
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("https://client.pro.srec.solutions/v1/oasis/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        // Obtener la instancia del servicio CommandService
+                        CommandService service = retrofit.create(CommandService.class);
+
+                        // Realizar la solicitud POST
+                        Call<Void> call = service.executeCommand(request);
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                System.out.println(response);
+                                if (response.isSuccessful()) {
+                                    // La solicitud POST fue exitosa
+                                    Toast.makeText(Resultado.this, "Solicitud POST exitosa", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // La solicitud POST falló
+                                    Toast.makeText(Resultado.this, "Error en la solicitud POST", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                // Error en la comunicación con el servidor
+                                Toast.makeText(Resultado.this, "Error en la comunicación con el servidor", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                Intent intent = new Intent(Resultado.this, MainActivity.class);
                     startActivity(intent);
                 }
             });
@@ -88,61 +120,71 @@ public class Resultado extends AppCompatActivity {
             containerLayout.addView(spaceView);
         }
 
-        if (savedText1.equals("Fichar") || savedText2.equals("Fichar") || savedText3.equals("Fichar")) {
-            // Crear el botón "buttonFichar"
-            Button buttonFichar = new Button(new ContextThemeWrapper(this, R.style.result_button));
-            buttonFichar.setText("Fichar");
+        if (savedText1.equals("Inicio") || savedText2.equals("Inicio") || savedText3.equals("Inicio")) {
+            // Crear el botón "buttonInicio"
+            Button buttonInicio = new Button(new ContextThemeWrapper(this, R.style.result_button));
+            buttonInicio.setText("Inicio");
 
-            buttonFichar.setBackgroundResource(R.drawable.fichar_button_background);
+            buttonInicio.setBackgroundResource(R.drawable.inicio_button_background);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                buttonFichar.setTextAppearance(R.style.ResultButtonText);
+                buttonInicio.setTextAppearance(R.style.ResultButtonText);
             } else {
-                buttonFichar.setTextColor(getResources().getColor(R.color.sinvad));
-                buttonFichar.setTextSize(18); // Tamaño del texto en sp
+                buttonInicio.setTextColor(getResources().getColor(R.color.sinvad));
+                buttonInicio.setTextSize(18); // Tamaño del texto en sp
                 // Otros atributos de texto que quieras establecer
             }
 
-            buttonFichar.setOnClickListener(new View.OnClickListener() {
+            buttonInicio.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Obtener el phyId de las preferencias compartidas
-                    SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-                    String phyId = sharedPreferences.getString("phyId", "");
+                    // Aquí colocas el código de la consulta
 
-                        // Crear una instancia de FicharRequest con los datos adecuados
-                        FicharRequest request = new FicharRequest("parada", "Test", "2024-03-26T13:37:21");
+                    // Obtener la fecha y hora actual
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    String timestamp = sdf.format(new Date());
 
-                        // Llamar al método fichar de la interfaz ApiUser
-                        Call<Void> call = apiUser.fichar("b2e1a685386a44ca9f68-2c05057103f", phyId, request);
+                    // Crear el objeto CommandRequest con los datos necesarios
+                    CommandRequest request = new CommandRequest("inicio", "Test", timestamp);
 
-                        // Realizar la llamada asíncrona
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(Resultado.this, "¡Fichaje exitoso!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(Resultado.this, "Error en el servidor: " + response.code(), Toast.LENGTH_SHORT).show();
-                                }
+                    // Crear una instancia de Retrofit
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("https://client.pro.srec.solutions/v1/oasis/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    // Obtener la instancia del servicio CommandService
+                    CommandService service = retrofit.create(CommandService.class);
+
+                    // Realizar la solicitud POST
+                    Call<Void> call = service.executeCommand(request);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            System.out.println(response);
+                            if (response.isSuccessful()) {
+                                // La solicitud POST fue exitosa
+                                Toast.makeText(Resultado.this, "Solicitud POST exitosa", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // La solicitud POST falló
+                                Toast.makeText(Resultado.this, "Error en la solicitud POST", Toast.LENGTH_SHORT).show();
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                Toast.makeText(Resultado.this, "Error al enviar la solicitud: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            // Error en la comunicación con el servidor
+                            Toast.makeText(Resultado.this, "Error en la comunicación con el servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
                     Intent intent = new Intent(Resultado.this, MainActivity.class);
                     startActivity(intent);
                 }
             });
 
-
-
-
             // Agregar el botón al contenedor (layout)
-            containerLayout.addView(buttonFichar);
+            containerLayout.addView(buttonInicio);
 
             View spaceView = new View(this);
             spaceView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -151,32 +193,71 @@ public class Resultado extends AppCompatActivity {
             containerLayout.addView(spaceView);
         }
 
-        if (savedText1.equals("Desfichar") || savedText2.equals("Desfichar") || savedText3.equals("Desfichar")) {
-            // Crear el botón "buttonDesfichar"
-            Button buttonDesfichar = new Button(new ContextThemeWrapper(this, R.style.result_button));
-            buttonDesfichar.setText("Parada");
+        if (savedText1.equals("Parada") || savedText2.equals("Parada") || savedText3.equals("Parada")) {
+            // Crear el botón "buttonParada"
+            Button buttonParada = new Button(new ContextThemeWrapper(this, R.style.result_button));
+            buttonParada.setText("Parada");
 
-            buttonDesfichar.setBackgroundResource(R.drawable.desfichar_button_background);
+            buttonParada.setBackgroundResource(R.drawable.parada_button_background);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                buttonDesfichar.setTextAppearance(R.style.DesfichajeButtonText);
+                buttonParada.setTextAppearance(R.style.ParadaButtonText);
             } else {
-                buttonDesfichar.setTextColor(getResources().getColor(R.color.sinvad));
-                buttonDesfichar.setTextSize(18); // Tamaño del texto en sp
+                buttonParada.setTextColor(getResources().getColor(R.color.sinvad));
+                buttonParada.setTextSize(18); // Tamaño del texto en sp
                 // Otros atributos de texto que quieras establecer
             }
 
-            buttonDesfichar.setOnClickListener(new View.OnClickListener() {
+            buttonParada.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Iniciar MainActivity al hacer clic en el botón "Desfichar"
+                    // Aquí colocas el código de la consulta
+
+                    // Obtener la fecha y hora actual
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    String timestamp = sdf.format(new Date());
+
+                    // Crear el objeto CommandRequest con los datos necesarios
+                    CommandRequest request = new CommandRequest("parada", "Test", timestamp);
+
+                    // Crear una instancia de Retrofit
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("https://client.pro.srec.solutions/v1/oasis/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    // Obtener la instancia del servicio CommandService
+                    CommandService service = retrofit.create(CommandService.class);
+
+                    // Realizar la solicitud POST
+                    Call<Void> call = service.executeCommand(request);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            System.out.println(response);
+                            if (response.isSuccessful()) {
+                                // La solicitud POST fue exitosa
+                                Toast.makeText(Resultado.this, "Solicitud POST exitosa", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // La solicitud POST falló
+                                Toast.makeText(Resultado.this, "Error en la solicitud POST", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            // Error en la comunicación con el servidor
+                            Toast.makeText(Resultado.this, "Error en la comunicación con el servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                     Intent intent = new Intent(Resultado.this, MainActivity.class);
                     startActivity(intent);
                 }
             });
 
             // Agregar el botón al contenedor (layout)
-            containerLayout.addView(buttonDesfichar);
+            containerLayout.addView(buttonParada);
         }
     }
 }

@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.codecamera.api.ImageRequest;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -105,19 +107,19 @@ public class Confirmacion extends AppCompatActivity {
             // Foto capturada con éxito, obtener la imagen
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-
+/*
             // Guardar la imagen en el almacenamiento externo
             saveImageToExternalStorage(imageBitmap);
 
             // Guardar la imagen en formato base64 en la ubicación interna
             saveImageAsBase64(imageBitmap);
-
+*/
             // Abrir la actividad 'activity_resultado'
             Intent resultadoIntent = new Intent(this, Resultado.class);
             startActivity(resultadoIntent);
         }
     }
-
+/*
     private void saveImageToExternalStorage(Bitmap imageBitmap) {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "IMG_" + timeStamp + ".jpg";
@@ -145,33 +147,24 @@ public class Confirmacion extends AppCompatActivity {
     }
 
     private void saveImageAsBase64(Bitmap imageBitmap) {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + ".jpg";
-
-        // Guardar la imagen en formato base64
+        // Convertir la imagen a formato Base64
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         String base64Image = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-        // Guardar la imagen base64 en el directorio especificado
-        String dbPath = "/data/data/" + getPackageName() + "/pictures/";
-        File dbDir = new File(dbPath);
-        if (!dbDir.exists()) {
-            dbDir.mkdirs(); // Crea el directorio si no existe
-        }
-        File imageFile = new File(dbDir, imageFileName);
+        // Crear una instancia de ImageRequest con el nombre de la imagen y los datos en formato Base64
+        ImageRequest imageRequest = new ImageRequest("nombre_imagen", base64Image);
 
-        try {
-            FileWriter writer = new FileWriter(imageFile);
-            writer.write(base64Image);
-            writer.flush();
-            writer.close();
-            Toast.makeText(this, "Imagen guardada en " + imageFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error al guardar la imagen en formato base64", Toast.LENGTH_SHORT).show();
+        // Enviar la imagen al servidor y verificar si se envió correctamente
+        boolean imageSentSuccessfully = imageRequest.sendImageToServer();
+
+        // Mostrar un mensaje según el resultado de la solicitud
+        if (imageSentSuccessfully) {
+            Toast.makeText(this, "La imagen se ha enviado correctamente al servidor", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Error al enviar la imagen al servidor", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 }
 

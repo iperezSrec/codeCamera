@@ -1,12 +1,11 @@
 package com.example.codecamera.api;
 
-public class FicharRequest {
-
+public class CommandRequest {
     private String commandName;
     private String deviceName;
     private String timestamp;
 
-    public FicharRequest(String commandName, String deviceName, String timestamp) {
+    public CommandRequest(String commandName, String deviceName, String timestamp) {
         this.commandName = commandName;
         this.deviceName = deviceName;
         this.timestamp = timestamp;
@@ -35,5 +34,4 @@ public class FicharRequest {
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
-
 }
