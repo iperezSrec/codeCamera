@@ -16,7 +16,7 @@ public class CommandRequest {
     }
 
     public void setCommandName(String commandName) {
-        this.commandName = commandName;
+        this.commandName  = commandName;
     }
 
     public String getDeviceName() {

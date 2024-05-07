@@ -1,68 +1,78 @@
 package com.example.codecamera.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.example.codecamera.api.UserData;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    String DbName;
-    String DbPath;
-    Context context;
+    private static final String DB_NAME = "trabajadores.db";
+    private static final int DB_VERSION = 1;
 
+    private final Context mContext;
 
-    public DatabaseHelper(Context mcontext, String name, int version) {
-        super(mcontext, name, null, version);
-
-        this.context = mcontext;
-        DbName = "trabajadores.db";
-        DbPath = "/data/data/" + context.getPackageName() + "/databases/";
+    public DatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
+        mContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
     }
 
-    public void CheckDatabase(){
-        try{
-            String path = DbPath + DbName;
-            SQLiteDatabase.openDatabase(path, null, 0);
-        }catch (Exception e){}
+    public void checkAndRecreateTable() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS usuarios");
+        db.execSQL("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, phId TEXT)");
+        db.close();
 
-        this.getReadableDatabase();
-        CopyDatabase();
-    }
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://client.pre.srec.solutions/v1/oasis/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-    public void CopyDatabase(){
-        try{
-            InputStream io = context.getAssets().open(DbName);
+        DatabaseService apiService = retrofit.create(DatabaseService.class);
 
-            String oufilename = DbPath + DbName;
-            OutputStream outputStream = new FileOutputStream(oufilename);
-            int lenght;
-            byte[] buffer = new byte[1024];
-            while ((lenght = io.read(buffer)) > 0){
-                outputStream.write(buffer, lenght, 0);
+        Call<List<UserData>> call = apiService.getUserList();
+        call.enqueue(new Callback<List<UserData>>() {
+            @Override
+            public void onResponse(Call<List<UserData>> call, Response<List<UserData>> response) {
+                if (response.isSuccessful()) {
+                    List<UserData> userList = response.body();
+                    for (UserData user : userList) {
+                        insertUser(user.getName(), user.getRole(), user.getPhId());
+                    }
+                }
             }
 
-            io.close();
-            outputStream.flush();
-            outputStream.close();
-        }catch (Exception e){}
+            @Override
+            public void onFailure(Call<List<UserData>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 
-    public void OpenDatabase(){
-        String path = DbPath + DbName;
-        SQLiteDatabase.openDatabase(path, null, 0);
+    public void insertUser(String name, String role, String phId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", name);
+        values.put("role", role);
+        values.put("phId", phId);
+        db.insert("usuarios", null, values);
+        db.close();
     }
 }

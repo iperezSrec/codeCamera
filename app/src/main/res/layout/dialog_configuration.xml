@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -11,7 +10,6 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <!-- Primer LinearLayout con peso 1 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -28,7 +26,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:hint="Botón 1" />
+                    android:hint="Botón de Entrada" />
 
                 <EditText
                     android:id="@+id/btn2"
@@ -38,7 +36,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:hint="Botón 2" />
+                    android:hint="Botón de Inicio" />
 
                 <EditText
                     android:id="@+id/btn3"
@@ -48,22 +46,22 @@
                     android:layout_alignParentLeft="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:hint="Botón 3" />
+                    android:hint="Botón de Parada" />
             </LinearLayout>
 
-            <!-- Segundo LinearLayout con peso 1 -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="      Selecciona la cantidad de botones:"/>
-                <Spinner
-                    android:id="@+id/spinnerOptions"
+                    android:text="      Escribe la localización:"/>
+                <EditText
+                    android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -80,7 +78,6 @@
                     android:text="Aceptar"
                     android:textColor="@color/white"
                     android:layout_gravity="bottom|end" />
-
 
             </LinearLayout>
 

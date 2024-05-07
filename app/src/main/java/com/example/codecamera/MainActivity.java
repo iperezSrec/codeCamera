@@ -25,15 +25,19 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewForgotPassword;
 
+    private DatabaseHelper mDatabaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        databaseHelper = new DatabaseHelper(this, "trabajadores.db", 1);
+        mDatabaseHelper = new DatabaseHelper(this);
+        mDatabaseHelper.checkAndRecreateTable();
 
-        // Obtener referencias a los indicadores circulares
-        dots = new ImageView[9]; // Ajustar a 9 indicadores
+        databaseHelper = new DatabaseHelper(this);
+
+        dots = new ImageView[9];
         dots[0] = findViewById(R.id.dot1);
         dots[1] = findViewById(R.id.dot2);
         dots[2] = findViewById(R.id.dot3);
@@ -45,15 +49,14 @@ public class MainActivity extends AppCompatActivity {
         dots[8] = findViewById(R.id.dot9);
         textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
 
-        // Agregar OnClickListener al textViewForgotPassword
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Abrir la actividad activity_noti_contra
-                Intent intent = new Intent(MainActivity.this, notiContra.class);
-                startActivity(intent);
+                ForgotPasswordDialog dialogFragment = new ForgotPasswordDialog();
+                dialogFragment.show(getSupportFragmentManager(), "NotiContraDialogFragment");
             }
         });
+
     }
 
 
@@ -66,67 +69,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClearButtonClick(View view) {
-        enteredCode.setLength(0); // Limpiar el código
-        updateIndicators(); // Actualizar los indicadores (círculos vacíos)
+        enteredCode.setLength(0);
+        updateIndicators();
     }
 
     private void updateIndicators() {
         for (int i = 0; i < dots.length; i++) {
             if (i < enteredCode.length()) {
-                dots[i].setImageResource(R.drawable.circle_filled); // Marcar indicador (círculo lleno)
+                dots[i].setImageResource(R.drawable.circle_filled);
             } else {
-                dots[i].setImageResource(R.drawable.circle_empty); // Restablecer indicador (círculo vacío)
+                dots[i].setImageResource(R.drawable.circle_empty);
             }
         }
 
         if (enteredCode.length() == 9) {
-            // Verificar el código ingresado consultando la base de datos
             String phId = enteredCode.toString();
             if (isValidCode(phId)) {
-                // Código correcto, desbloquear la aplicación
                 showConfirmationScreen(phId);
             } else {
-                // Código incorrecto, restablecer indicadores (círculos vacíos)
                 Toast.makeText(this, "Código incorrecto", Toast.LENGTH_SHORT).show();
             }
-            // Limpiar el código después de intentar desbloquear
             enteredCode.setLength(0);
             updateIndicators();
         }
     }
 
     private boolean isValidCode(String phId) {
-        // Consultar la base de datos para verificar si phId está en trabajadores.phId
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
         String[] columns = {"phId"};
         String selection = "phId = ?";
         String[] selectionArgs = {phId};
         Cursor cursor = db.query("usuarios", columns, selection, selectionArgs, null, null, null);
         boolean isValid = cursor.getCount() > 0;
         cursor.close();
+        db.close();
         return isValid;
     }
 
+
     private void showConfirmationScreen(String phId) {
-        // Guardar phId en SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("phId", phId);
         editor.apply();
 
-        // Obtener el nombre correspondiente a phId desde la base de datos
         String name = getNameFromDatabase(phId);
+        String role = getRoleFromDatabase(phId);
 
-        // Iniciar la actividad Confirmacion y pasar el nombre como extra
-        Intent intent = new Intent(this, Confirmacion.class);
+        Intent intent = new Intent(this, IdentityVerificationActivity.class);
         intent.putExtra("NAME", name);
+        intent.putExtra("ROLE", role);
         startActivity(intent);
     }
 
 
+
+
     @SuppressLint("Range")
     private String getNameFromDatabase(String phId) {
-        // Consultar la base de datos para obtener el nombre asociado a phId
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         String[] columns = {"name"};
         String selection = "phId = ?";
@@ -138,6 +138,21 @@ public class MainActivity extends AppCompatActivity {
         }
         cursor.close();
         return name;
+    }
+
+    @SuppressLint("Range")
+    private String getRoleFromDatabase(String phId) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        String[] columns = {"role"};
+        String selection = "phId = ?";
+        String[] selectionArgs = {phId};
+        Cursor cursor = db.query("usuarios", columns, selection, selectionArgs, null, null, null);
+        String role = "";
+        if (cursor.moveToFirst()) {
+            role = cursor.getString(cursor.getColumnIndex("role"));
+        }
+        cursor.close();
+        return role;
     }
 }
 

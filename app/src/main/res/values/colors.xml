@@ -4,6 +4,6 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#545454</color>
     <color name="red">#ff3366</color>
-    <color name="colorButtonNormal">#FFFFFF</color> <!-- Color normal (blanco) -->
-    <color name="colorButtonPressed">#DDDDDD</color> <!-- Color cuando está presionado (gris claro) -->
+    <color name="colorButtonNormal">#FFFFFF</color>
+    <color name="colorButtonPressed">#DDDDDD</color>
 </resources>

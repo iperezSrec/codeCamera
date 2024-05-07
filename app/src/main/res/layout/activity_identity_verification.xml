@@ -14,7 +14,8 @@
         android:onClick="onConfigurationClicked"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        android:visibility="gone"/>
 
 
 
@@ -23,12 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hola !"
-        android:textSize="80dp"
+        android:textSize="100dp"
         android:textColor="@color/sinvad"
         android:fontFamily="@font/font_tittle"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/textViewQuestion"
-        android:layout_marginBottom="32dp"
         />
 
     <TextView
@@ -36,37 +36,51 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
-        android:textSize="40sp"
+        android:textSize="50dp"
         android:textColor="#000000"
         android:fontFamily="@font/font_text"
         android:layout_marginHorizontal="100dp"
         android:textAlignment="center"
         android:layout_centerHorizontal="true"
-        android:layout_above="@id/textExplanation"
+        android:layout_above="@id/textExplanation1"
         android:layout_marginBottom="16dp"
         />
 
     <TextView
-        android:id="@+id/textExplanation"
+        android:id="@+id/textExplanation1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Si es así, tendrás que sacar una foto para completar el proceso."
+        android:text="Si es así, tendrás que sacar una foto para completar el proceso,"
         android:textSize="20sp"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginBottom="16dp"
         android:textAlignment="center"
         android:fontFamily="@font/font_text"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 
+    <TextView
+        android:id="@+id/textExplanation2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textExplanation1"
+        android:layout_alignParentEnd="true"
+        android:text="en el caso contrario deberás volver a introducir el código."
+        android:textSize="20sp"
+        android:layout_marginHorizontal="50dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/font_text"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+
     <LinearLayout
         android:id="@+id/responseContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textExplanation"
+        android:layout_below="@id/textExplanation2"
         android:layout_alignParentEnd="true"
         android:gravity="center_vertical|center_horizontal"
-        android:paddingTop="32dp"
+        android:paddingTop="40dp"
         android:paddingEnd="16dp">
 
         <LinearLayout
@@ -76,41 +90,31 @@
             android:layout_marginStart="70dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/fotoExplanation1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="¿NO ERES TÚ? "
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:fontFamily="@font/font_tittle"
-                android:textColor="@color/black"/>
-
             <LinearLayout
                 android:id="@+id/fotoContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/yes_button_background">
-
+                android:background="@drawable/yes_button_background"
+                android:layout_marginEnd="100dp"
+                android:paddingVertical="10dp">
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/atras"
-                    android:paddingStart="10dp"/>
+                    android:src="@drawable/back"/>
 
 
                 <TextView
                     android:id="@+id/buttonNo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/font_text"
-                    android:text="  VOLVER ATRAS    "
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:paddingVertical="10dp"
+                    android:text="VOLVER"
+                    android:textSize="50dp"
+                    android:layout_marginEnd="5dp"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/font_bold"
+                    android:textColor="@color/white"
                     android:onClick="onNoClicked"/>
 
 
@@ -118,29 +122,13 @@
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="108dp"
-            android:layout_height="match_parent"/>
         <LinearLayout
             android:id="@+id/fotoContainer2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/camera_button"
             android:orientation="horizontal"
-            android:paddingVertical="10dp">
-
-
-            <TextView
-                android:id="@+id/fotoExplanation2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text=" SOY YO "
-                android:textSize="50dp"
-                android:textAlignment="center"
-                android:paddingTop="15dp"
-                android:fontFamily="@font/font_tittle"
-                android:textColor="@color/white"/>
-
+            android:layout_marginEnd="70dp">
 
             <ImageButton
                 android:id="@+id/buttonYes"
@@ -148,14 +136,25 @@
                 android:layout_height="match_parent"
                 android:src="@drawable/camera"
                 android:background="@android:color/transparent"
-                android:onClick="onYesClicked"
-                android:paddingVertical="5dp"/>
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:onClick="onYesClicked"/>
 
-
+            <TextView
+                android:id="@+id/fotoExplanation2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="FOTO"
+                android:textSize="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/font_bold"
+                android:textColor="@color/white"
+                android:onClick="onYesClicked"/>
 
         </LinearLayout>
     </LinearLayout>
-
 
 </RelativeLayout>
 

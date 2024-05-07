@@ -5,7 +5,6 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@android:color/white">
 
-<!-- Logo ImageView -->
 <ImageView
     android:id="@+id/logo"
     android:layout_width="179dp"
@@ -30,7 +29,6 @@ android:background="@android:color/white">
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"/>
 
-<!-- Indicator Container LinearLayout -->
 <LinearLayout
     android:id="@+id/indicatorContainer"
     android:layout_width="wrap_content"
@@ -41,7 +39,6 @@ android:background="@android:color/white">
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_marginBottom="16dp">
 
-    <!-- Primeros 6 indicadores -->
     <ImageView
         android:id="@+id/dot1"
         android:layout_width="24dp"
@@ -84,7 +81,6 @@ android:background="@android:color/white">
         android:layout_marginEnd="8dp"
         android:src="@drawable/circle_empty" />
 
-    <!-- Indicadores adicionales (7, 8, 9) -->
     <ImageView
         android:id="@+id/dot7"
         android:layout_width="24dp"
@@ -107,8 +103,6 @@ android:background="@android:color/white">
 
 </LinearLayout>
 
-
-<!-- Forgot Password TextView -->
 <TextView
     android:id="@+id/textViewForgotPassword"
     android:layout_width="wrap_content"
@@ -124,7 +118,6 @@ android:background="@android:color/white">
     android:gravity="center"
     android:layout_marginBottom="50dp"/>
 
-<!-- RelativeLayout para el GridLayout -->
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -133,7 +126,6 @@ android:background="@android:color/white">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/textViewForgotPassword">
 
-    <!-- Keyboard GridLayout -->
     <GridLayout
         android:id="@+id/keyboardGrid"
         android:layout_width="match_parent"
@@ -299,7 +291,6 @@ android:background="@android:color/white">
             android:text="1"
             android:textColor="@color/black"
             android:textSize="30sp" />
-
 
     </GridLayout>
 </RelativeLayout>
