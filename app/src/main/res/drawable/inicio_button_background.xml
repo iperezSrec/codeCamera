@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Fondo blanco para asegurar que el color se aplique correctamente -->
+    <item android:drawable="@android:color/white" />
+
+    <!-- Imagen original de inicio -->
     <item android:drawable="@drawable/inicio" />
 
+    <!-- Máscara de color para aplicar tinte -->
+    <item>
+        <bitmap android:src="@drawable/inicio"
+            android:tint="@color/colorPrimario"
+            android:gravity="fill"/>
+    </item>
+
+    <!-- Borde de color primario -->
     <item>
         <shape android:shape="rectangle">
             <stroke
                 android:width="5dp"
-                android:color="@color/sinvad" />
+                android:color="@color/colorPrimario" />
         </shape>
     </item>
 
+    <!-- Efecto de fondo seleccionable -->
     <item android:drawable="?android:attr/selectableItemBackground" />
+
 </layer-list>

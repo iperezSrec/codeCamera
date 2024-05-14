@@ -32,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ImageView logoImageView = findViewById(R.id.logo);
+        int logoResourceId = R.drawable.imagenEmpresa;
+        logoImageView.setImageResource(logoResourceId);
+
         mDatabaseHelper = new DatabaseHelper(this);
         mDatabaseHelper.checkAndRecreateTable();
 
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ForgotPasswordDialog dialogFragment = new ForgotPasswordDialog();
-                dialogFragment.show(getSupportFragmentManager(), "NotiContraDialogFragment");
+                dialogFragment.show(getSupportFragmentManager(), "ForgotPasswordDialogFragment");
             }
         });
 

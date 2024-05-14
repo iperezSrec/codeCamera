@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
@@ -12,20 +13,22 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_sinvad_launcher"
+        android:icon="@drawable/imagenEmpresa"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_sinvad_launcher_round"
+        android:roundIcon="@drawable/imagenEmpresa"
         android:supportsRtl="true"
         android:theme="@style/Theme.CodeCamera"
         tools:targetApi="31">
+        <activity android:name=".IdentityVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CameraActivity"
+            android:exported="false" />
         <activity
             android:name=".ForgotPasswordDialog"
             android:exported="false" />
         <activity
             android:name=".AccessControlActivity"
-            android:exported="false" />
-        <activity
-            android:name=".IdentityVerificationActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

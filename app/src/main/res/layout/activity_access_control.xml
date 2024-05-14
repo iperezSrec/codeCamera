@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="Pulse y espere a la confirmación:"
         android:textSize="30dp"
-        android:textColor="@color/sinvad"
+        android:textColor="@color/colorPrimario"
         android:fontFamily="@font/font_tittle"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/containerLayout"

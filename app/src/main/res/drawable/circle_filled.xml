@@ -4,5 +4,5 @@
         android:width="30dp"
         android:height="30dp" />
     <solid
-        android:color="@color/sinvad" />
+        android:color="@color/colorPrimario" />
 </shape>

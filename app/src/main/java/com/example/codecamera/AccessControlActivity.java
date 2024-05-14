@@ -71,7 +71,7 @@ public class AccessControlActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 buttonEntrada.setTextAppearance(R.style.ResultButtonText);
             } else {
-                buttonEntrada.setTextColor(getResources().getColor(R.color.sinvad));
+                buttonEntrada.setTextColor(getResources().getColor(R.color.colorPrimario));
                 buttonEntrada.setTextSize(18);
             }
             buttonEntrada.setOnClickListener(new View.OnClickListener() {
@@ -148,7 +148,7 @@ public class AccessControlActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 buttonInicio.setTextAppearance(R.style.ResultButtonText);
             } else {
-                buttonInicio.setTextColor(getResources().getColor(R.color.sinvad));
+                buttonInicio.setTextColor(getResources().getColor(R.color.colorPrimario));
                 buttonInicio.setTextSize(18);
             }
 
@@ -224,7 +224,7 @@ public class AccessControlActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 buttonParada.setTextAppearance(R.style.ParadaButtonText);
             } else {
-                buttonParada.setTextColor(getResources().getColor(R.color.sinvad));
+                buttonParada.setTextColor(getResources().getColor(R.color.colorPrimario));
                 buttonParada.setTextSize(18);
             }
 
