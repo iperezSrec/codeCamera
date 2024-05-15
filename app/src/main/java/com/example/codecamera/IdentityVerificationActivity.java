@@ -35,6 +35,14 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         ImageButton imageButton = findViewById(R.id.buttonConfiguration);
         if (role.equals("admin")) {
             imageButton.setVisibility(View.VISIBLE);
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showConfigurationDialog();
+                }
+            });
+        } else {
+            imageButton.setVisibility(View.GONE);
         }
 
         responseContainer = findViewById(R.id.responseContainer);
@@ -42,42 +50,36 @@ public class IdentityVerificationActivity extends AppCompatActivity {
         fotoContainer1 = findViewById(R.id.fotoContainer1);
         fotoContainer2 = findViewById(R.id.fotoContainer2);
 
-        // Crear OrientationEventListener para detectar cambios de orientación
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
-                // Verificar si la orientación del dispositivo es vertical
-                if (isPortraitOrientation()) { // Cambiar a orientación vertical
+                if (isPortraitOrientation()) {
                     responseContainer.setOrientation(LinearLayout.VERTICAL);
                     fotoContaine.setVisibility(View.VISIBLE);
                     LinearLayout.LayoutParams layoutParamsFotoContainer1 = (LinearLayout.LayoutParams) fotoContainer1.getLayoutParams();
                     layoutParamsFotoContainer1.height = 0;
                     fotoContainer1.setLayoutParams(layoutParamsFotoContainer1);
                     fotoContainer1.setVisibility(View.INVISIBLE);
-                    // Establecer margen de inicio para fotoContainer2
                     LinearLayout.LayoutParams layoutParamsFotoContainer2 = (LinearLayout.LayoutParams) fotoContainer2.getLayoutParams();
                     layoutParamsFotoContainer2.setMarginStart(200);
                     layoutParamsFotoContainer2.setMarginEnd(0);
                     fotoContainer2.setLayoutParams(layoutParamsFotoContainer2);
 
-                    // Establecer margen superior para fotoContaine
                     LinearLayout.LayoutParams layoutParamsFotoContaine = (LinearLayout.LayoutParams) fotoContaine.getLayoutParams();
                     layoutParamsFotoContaine.topMargin = 50;
                     fotoContaine.setLayoutParams(layoutParamsFotoContaine);
-                } else { // Mantener la orientación horizontal
+                } else {
                     responseContainer.setOrientation(LinearLayout.HORIZONTAL);
                 }
             }
         };
 
-        // Comenzar a escuchar los cambios de orientación
         orientationEventListener.enable();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Detener la escucha de cambios de orientación al destruir la actividad
         orientationEventListener.disable();
     }
 
@@ -107,7 +109,7 @@ public class IdentityVerificationActivity extends AppCompatActivity {
     }
 
     public void onYesClicked(View view) {
-        Intent intent = new Intent(this, AccessControlActivity.class);
+        Intent intent = new Intent(IdentityVerificationActivity.this, CameraActivity.class);
         startActivity(intent);
     }
 

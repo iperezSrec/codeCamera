@@ -1,40 +1,42 @@
 package com.example.codecamera;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.AspectRatio;
+import androidx.camera.core.Camera;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
+import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
+import androidx.core.content.ContextCompat;
+
 import android.Manifest;
 import android.content.Context;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.ImageFormat;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CaptureRequest;
-import android.media.Image;
-import android.media.ImageReader;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.view.SurfaceView;
-import android.util.Size;
-import android.view.Surface;
-import android.view.SurfaceHolder;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import com.example.codecamera.api.ImageService;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -45,181 +47,108 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CameraActivity extends AppCompatActivity {
-
-    private static final int IMAGE_WIDTH = 640;
-    private static final int IMAGE_HEIGHT = 480;
-
-    private CameraDevice cameraDevice;
-    private CameraCaptureSession cameraCaptureSession;
-    private ImageReader imageReader;
-    private Size previewSize;
-    private CaptureRequest.Builder captureRequestBuilder;
-    private Handler backgroundHandler;
-    private HandlerThread backgroundThread;
+    ImageButton capture;
+    private PreviewView previewView;
+    int cameraFacing = CameraSelector.LENS_FACING_BACK;
+    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), new ActivityResultCallback<Boolean>() {
+        @Override
+        public void onActivityResult(Boolean result) {
+            if (result) {
+                startCamera(cameraFacing);
+            }
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        previewView = findViewById(R.id.cameraPreview);
+        capture = findViewById(R.id.capture);
+
+        cameraFacing = CameraSelector.LENS_FACING_FRONT;
+
+        if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            activityResultLauncher.launch(Manifest.permission.CAMERA);
+        } else {
+            startCamera(cameraFacing);
+        }
     }
-    private void openCamera() {
-        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-        try {
-            String cameraId = null;
-            for (String id : cameraManager.getCameraIdList()) {
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(id);
-                if (characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
-                    cameraId = id;
-                    break;
+
+    public void startCamera(int cameraFacing) {
+        int aspectRatio = aspectRatio(previewView.getWidth(), previewView.getHeight());
+        ListenableFuture<ProcessCameraProvider> listenableFuture = ProcessCameraProvider.getInstance(this);
+
+        listenableFuture.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = (ProcessCameraProvider) listenableFuture.get();
+
+                Preview preview = new Preview.Builder().setTargetAspectRatio(aspectRatio).build();
+
+                ImageCapture imageCapture = new ImageCapture.Builder().setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+                        .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation()).build();
+
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(cameraFacing).build();
+
+                cameraProvider.unbindAll();
+
+                Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture);
+
+                capture.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (ContextCompat.checkSelfPermission(CameraActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        }
+                        takePicture(imageCapture);
+                    }
+                });
+
+                preview.setSurfaceProvider(previewView.getSurfaceProvider());
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    public void takePicture(ImageCapture imageCapture) {
+        imageCapture.takePicture(Executors.newCachedThreadPool(), new ImageCapture.OnImageCapturedCallback() {
+            @Override
+            public void onCaptureSuccess(@NonNull ImageProxy image) {
+                ImageProxy.PlaneProxy[] planes = image.getPlanes();
+                ByteBuffer buffer = planes[0].getBuffer();
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                image.close();
+                if (bitmap != null) {
+                    convertImageToUpload(bitmap);
                 }
+                Intent intent = new Intent(CameraActivity.this, AccessControlActivity.class);
+                startActivity(intent);
             }
 
-            if (cameraId != null) {
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-                previewSize = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
-                        .getOutputSizes(SurfaceHolder.class)[0];
-
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-                cameraManager.openCamera(cameraId, new CameraDevice.StateCallback() {
-                    @Override
-                    public void onOpened(@NonNull CameraDevice camera) {
-                        cameraDevice = camera;
-                        createCameraPreview();
-                    }
-
-                    @Override
-                    public void onDisconnected(@NonNull CameraDevice camera) {
-                        cameraDevice.close();
-                        cameraDevice = null;
-                    }
-
-                    @Override
-                    public void onError(@NonNull CameraDevice camera, int error) {
-                        cameraDevice.close();
-                        cameraDevice = null;
-                    }
-                }, null);
+            @Override
+            public void onError(@NonNull ImageCaptureException exception) {
+                Toast.makeText(CameraActivity.this, "Error al capturar la imagen", Toast.LENGTH_SHORT).show();
             }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
-    private void createCameraPreview() {
-        try {
-            SurfaceView surfaceView = findViewById(R.id.surfaceView);
-            surfaceView.getHolder().setFixedSize(previewSize.getWidth(), previewSize.getHeight());
 
-            Surface surface = surfaceView.getHolder().getSurface();
-            captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            captureRequestBuilder.addTarget(surface);
-
-            cameraDevice.createCaptureSession(Arrays.asList(surface, imageReader.getSurface()),
-                    new CameraCaptureSession.StateCallback() {
-                        @Override
-                        public void onConfigured(@NonNull CameraCaptureSession session) {
-                            if (cameraDevice == null) return;
-                            cameraCaptureSession = session;
-                            try {
-                                captureRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-                                cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, backgroundHandler);
-                            } catch (CameraAccessException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-                            Toast.makeText(CameraActivity.this, "Failed to create capture session", Toast.LENGTH_SHORT).show();
-                        }
-                    }, null);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startBackgroundThread();
-        if (imageReader == null) {
-            imageReader = ImageReader.newInstance(IMAGE_WIDTH, IMAGE_HEIGHT, ImageFormat.JPEG, 1);
-            imageReader.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
-                @Override
-                public void onImageAvailable(ImageReader reader) {
-                    Image image = reader.acquireLatestImage();
-                    if (image != null) {
-                        processImage(image);
-                        image.close();
-                    }
-                }
-            }, backgroundHandler);
-        }
-        openCamera();
-    }
-
-    @Override
-    protected void onPause() {
-        closeCamera();
-        stopBackgroundThread();
-        super.onPause();
-    }
-
-    private void closeCamera() {
-        if (cameraCaptureSession != null) {
-            cameraCaptureSession.close();
-            cameraCaptureSession = null;
-        }
-        if (cameraDevice != null) {
-            cameraDevice.close();
-            cameraDevice = null;
-        }
-    }
-
-    private void startBackgroundThread() {
-        backgroundThread = new HandlerThread("CameraBackground");
-        backgroundThread.start();
-        backgroundHandler = new Handler(backgroundThread.getLooper());
-    }
-
-    private void stopBackgroundThread() {
-        backgroundThread.quitSafely();
-        try {
-            backgroundThread.join();
-            backgroundThread = null;
-            backgroundHandler = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void processImage(Image image) {
-        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-        byte[] bytes = new byte[buffer.remaining()];
-        buffer.get(bytes);
-
-        Bitmap imageBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-        saveImageAsBase64(imageBitmap);
-    }
-
-    private void saveImageAsBase64(Bitmap imageBitmap) {
+    private void convertImageToUpload(Bitmap imageBitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         imageBitmap.recycle();
 
-        RequestBody image = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
+        uploadImage(byteArray);
+    }
 
+    private void uploadImage(byte[] byteArray) {
+        RequestBody image = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://file-store-proxy.pro.srec.solutions/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -250,5 +179,13 @@ public class CameraActivity extends AppCompatActivity {
                 Toast.makeText(CameraActivity.this, "Error en la comunicación con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private int aspectRatio(int width, int height) {
+        double previewRatio = (double) Math.max(width, height) / Math.min(width, height);
+        if (Math.abs(previewRatio - 4.0 / 3.0) <= Math.abs(previewRatio - 16.0 / 9.0)) {
+            return AspectRatio.RATIO_4_3;
+        }
+        return AspectRatio.RATIO_16_9;
     }
 }

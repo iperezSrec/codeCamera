@@ -3,7 +3,7 @@ package com.example.codecamera.api;
 public class ImageRequest {
     private Object data;
 
-    public ImageRequest(Object data) {
+    public ImageRequest(Object data, String base64Image) {
         this.data = data;
     }
 

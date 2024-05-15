@@ -71,7 +71,6 @@ public class ConfigurationDialog extends DialogFragment {
         String text3 = editText3.getText().toString().trim();
         String location = editText4.getText().toString().trim();
 
-        // Verificar si el campo de la ubicación está vacío
         return !location.isEmpty();
     }
 

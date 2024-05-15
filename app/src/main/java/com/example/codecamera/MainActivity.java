@@ -6,18 +6,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.codecamera.db.DatabaseHelper;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
+
+    LinearLayout scan_btn;
 
     private StringBuilder enteredCode = new StringBuilder();
     private ImageView[] dots;
@@ -31,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        scan_btn = findViewById(R.id.scanner);
+        scan_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentIntegrator intentIntegrator = new IntentIntegrator(MainActivity.this);
+                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setPrompt("Escanea el código QR");
+                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                intentIntegrator.setCameraId(Camera.CameraInfo.CAMERA_FACING_FRONT);
+                intentIntegrator.initiateScan();
+            }
+        });
+
 
         ImageView logoImageView = findViewById(R.id.logo);
         int logoResourceId = R.drawable.imagenEmpresa;
@@ -60,9 +81,32 @@ public class MainActivity extends AppCompatActivity {
                 dialogFragment.show(getSupportFragmentManager(), "ForgotPasswordDialogFragment");
             }
         });
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (intentResult != null) {
+            String contents = intentResult.getContents();
+            if (contents != null) {
+                SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("phId", contents);
+                editor.apply();
+                checkAndProceed(contents);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void checkAndProceed(String phId) {
+        if (isValidCode(phId)) {
+            showConfirmationScreen(phId);
+        } else {
+            Toast.makeText(this, "Código incorrecto", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void onDigitButtonClick(View view) {
         if (enteredCode.length() < 9) {
@@ -88,11 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (enteredCode.length() == 9) {
             String phId = enteredCode.toString();
-            if (isValidCode(phId)) {
-                showConfirmationScreen(phId);
-            } else {
-                Toast.makeText(this, "Código incorrecto", Toast.LENGTH_SHORT).show();
-            }
+            checkAndProceed(phId);
             enteredCode.setLength(0);
             updateIndicators();
         }
@@ -110,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
         return isValid;
     }
 
-
     private void showConfirmationScreen(String phId) {
         SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -125,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("ROLE", role);
         startActivity(intent);
     }
-
-
-
 
     @SuppressLint("Range")
     private String getNameFromDatabase(String phId) {
@@ -159,5 +195,3 @@ public class MainActivity extends AppCompatActivity {
         return role;
     }
 }
-
-
