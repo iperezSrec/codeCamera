@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FichApp</string>
+
+    <!-- Nombres de los iconos -->
+    <string-array name="icon_names">
+        <item>home</item>
+        <item>favorite</item>
+        <item>settings</item>
+        <item>info</item>
+        <!-- Añade más nombres de iconos según sea necesario -->
+    </string-array>
 </resources>

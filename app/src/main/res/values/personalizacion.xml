@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimario">#299826</color>
+    <color name="colorSecundario">#00407a</color>
 
     <drawable name="imagenEmpresa">@drawable/pescadosruben</drawable>
+
+    <string name="apikey">b2e1a685386a44ca9f68-2c05057103f</string>
+    <string name="endpointFotos">https://file-store-proxy.pro.srec.solutions/</string>
+    <string name="endpointLlamadas">https://client.pro.srec.solutions/v1/oasis/</string>
 </resources>

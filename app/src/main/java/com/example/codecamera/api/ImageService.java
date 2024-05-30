@@ -11,7 +11,7 @@ public interface ImageService {
 
     @Headers({
             "fsp-token: EkM7EsJmYo6BJPfC",
-            "fsp-path: apikeys/43f42a657916ee7d035c4ee200c396a5e2396a661d2bec8053df06b52b8e499c/library/temp/",
+            "fsp-path: apikeys/43f42a657916ee7d035c4ee200c396a5e2396a661d2bec8053df06b52b8e499c/Library/temp/",
             "permanent-access: true",
             "Content-Type: image/png"
     })

@@ -2,10 +2,13 @@ package com.example.codecamera.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.codecamera.R;
 import com.example.codecamera.api.UserData;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, phId TEXT)");
     }
 
     @Override
@@ -36,12 +40,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void checkAndRecreateTable() {
         SQLiteDatabase db = getWritableDatabase();
+
         db.execSQL("DROP TABLE IF EXISTS usuarios");
-        db.execSQL("CREATE TABLE IF NOT EXISTS usuarios (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, role TEXT, phId TEXT)");
+        onCreate(db);
+
         db.close();
 
+        Resources resources = mContext.getResources();
+        String endpointLlamadas = resources.getString(R.string.endpointLlamadas);
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://client.pre.srec.solutions/v1/oasis/")
+                .baseUrl(endpointLlamadas)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -68,11 +77,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void insertUser(String name, String role, String phId) {
         SQLiteDatabase db = getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("role", role);
         values.put("phId", phId);
+
         db.insert("usuarios", null, values);
+
         db.close();
     }
 }

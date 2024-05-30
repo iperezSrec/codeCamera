@@ -12,18 +12,26 @@
         android:id="@+id/cameraPreview"/>
 
     <ImageButton
-        android:layout_width="60sp"
-        android:layout_height="60sp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40sp"
+        android:layout_marginBottom="40dp"
         android:id="@+id/capture"
-        android:src="@drawable/round_camera_24"
+        android:src="@drawable/circlecamera"
         android:scaleType="centerCrop"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:tint="#fff" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pulse para \nsacar foto"
+        android:textColor="@color/white"
+        android:layout_toStartOf="@id/capture"
+        android:layout_alignBottom="@id/capture"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:paddingBottom="20dp"
+        android:textSize="20dp"/>
 </RelativeLayout>
-
-
-

@@ -9,7 +9,7 @@
         android:id="@+id/buttonConfiguration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/configuration"
+        android:src="@drawable/configuration_background"
         android:background="@android:color/transparent"
         android:onClick="onConfigurationClicked"
         android:layout_alignParentRight="true"
@@ -23,7 +23,7 @@
         android:id="@+id/textViewSaludo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hola !"
+        android:text="Hola!"
         android:textSize="100dp"
         android:textColor="@color/colorPrimario"
         android:fontFamily="@font/font_tittle"
@@ -149,44 +149,12 @@
                 android:layout_height="match_parent"
                 android:text="FOTO"
                 android:textSize="60dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="5dp"
                 android:textAlignment="center"
                 android:fontFamily="@font/font_bold"
                 android:textColor="@color/white"
                 android:onClick="onYesClicked"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/fotoContaine"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:orientation="horizontal"
-            android:background="@drawable/yes_button_background"
-            android:layout_marginEnd="100dp"
-            android:paddingVertical="10dp"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/back"
-                android:onClick="onNoClicked"/>
-
-
-            <TextView
-                android:id="@+id/buttonN"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="VOLVER"
-                android:textSize="50dp"
-                android:layout_marginEnd="5dp"
-                android:textAlignment="center"
-                android:fontFamily="@font/font_bold"
-                android:textColor="@color/white"
-                android:onClick="onNoClicked"/>
-
 
         </LinearLayout>
     </LinearLayout>

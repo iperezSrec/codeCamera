@@ -50,7 +50,7 @@ public class ForgotPasswordDialog extends DialogFragment {
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
                 int screenWidth = displayMetrics.widthPixels;
 
-                int desiredWidth = (int) (screenWidth * 0.4);
+                int desiredWidth = (int) (screenWidth * 0.32 );
 
                 alertDialog.getWindow().setLayout(desiredWidth, WindowManager.LayoutParams.WRAP_CONTENT);
 

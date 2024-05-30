@@ -9,11 +9,10 @@ import retrofit2.http.POST;
 public interface CommandService {
 
     @Headers({
-            "apikey: b2e1a685386a44ca9f68-2c05057103f",
             "Content-Type: application/json"
     })
     @POST("executeCommand")
-    Call<Void> executeCommand(@Header("phyId") String phId, @Body CommandRequest commandRequest);
+    Call<Void> executeCommand(@Header("apikey") String apikey, @Header("phyId") String phId, @Body CommandRequest commandRequest);
 }
 
 

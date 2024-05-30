@@ -149,8 +149,9 @@ public class CameraActivity extends AppCompatActivity {
 
     private void uploadImage(byte[] byteArray) {
         RequestBody image = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
+        String endpointFotos = getResources().getString(R.string.endpointFotos);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://file-store-proxy.pro.srec.solutions/")
+                .baseUrl(endpointFotos)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

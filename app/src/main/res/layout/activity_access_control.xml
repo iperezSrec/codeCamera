@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text=""
         android:textColor="@color/black"
-        android:textSize="60dp"
+        android:textSize="40dp"
         android:fontFamily="@font/font_tittle"
         android:layout_below="@id/containerLayout"
         android:layout_centerHorizontal="true"

@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class MainActivity extends AppCompatActivity {
 
-    LinearLayout scan_btn;
+    ImageButton scan_btn;
 
     private StringBuilder enteredCode = new StringBuilder();
     private ImageView[] dots;
@@ -52,10 +52,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton keyboardButton = findViewById(R.id.keyboard);
+        keyboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleRelativeLayoutVisibility(v);
+            }
+        });
+
 
         ImageView logoImageView = findViewById(R.id.logo);
+        ImageView logoImageView2 = findViewById(R.id.logo2);
         int logoResourceId = R.drawable.imagenEmpresa;
         logoImageView.setImageResource(logoResourceId);
+        logoImageView2.setImageResource(logoResourceId);
 
         mDatabaseHelper = new DatabaseHelper(this);
         mDatabaseHelper.checkAndRecreateTable();
@@ -81,6 +91,18 @@ public class MainActivity extends AppCompatActivity {
                 dialogFragment.show(getSupportFragmentManager(), "ForgotPasswordDialogFragment");
             }
         });
+    }
+
+    public void toggleRelativeLayoutVisibility(View view) {
+        RelativeLayout relativeLayout = findViewById(R.id.relativeLayoutKeyboard);
+        RelativeLayout relativeLayout2 = findViewById(R.id.relativeLayoutQR);
+        if (relativeLayout.getVisibility() == View.VISIBLE) {
+            relativeLayout.setVisibility(View.GONE);
+            relativeLayout2.setVisibility(View.VISIBLE);
+        } else {
+            relativeLayout.setVisibility(View.VISIBLE);
+            relativeLayout2.setVisibility(View.GONE);
+        }
     }
 
     @Override

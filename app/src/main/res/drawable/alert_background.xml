@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white" />
+
+    <!-- Imagen original de entrada -->
+    <item android:drawable="@drawable/alert" />
+
+    <!-- Máscara de color para aplicar tinte -->
+    <item>
+        <bitmap android:src="@drawable/alert"
+            android:tint="@color/colorPrimario"
+            android:gravity="fill"/>
+    </item>
+</layer-list>

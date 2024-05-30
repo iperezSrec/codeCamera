@@ -8,16 +8,13 @@ import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class IdentityVerificationActivity extends AppCompatActivity {
+    private TextView buttonNo;
+    private TextView fotoExplanation2;
 
-    private LinearLayout responseContainer;
-    private LinearLayout fotoContaine;
-    private LinearLayout fotoContainer1;
-    private LinearLayout fotoContainer2;
 
     private OrientationEventListener orientationEventListener;
 
@@ -45,31 +42,17 @@ public class IdentityVerificationActivity extends AppCompatActivity {
             imageButton.setVisibility(View.GONE);
         }
 
-        responseContainer = findViewById(R.id.responseContainer);
-        fotoContaine = findViewById(R.id.fotoContaine);
-        fotoContainer1 = findViewById(R.id.fotoContainer1);
-        fotoContainer2 = findViewById(R.id.fotoContainer2);
+        buttonNo = findViewById(R.id.buttonNo);
+        fotoExplanation2 = findViewById(R.id.fotoExplanation2);
 
         orientationEventListener = new OrientationEventListener(this) {
             @Override
             public void onOrientationChanged(int orientation) {
                 if (isPortraitOrientation()) {
-                    responseContainer.setOrientation(LinearLayout.VERTICAL);
-                    fotoContaine.setVisibility(View.VISIBLE);
-                    LinearLayout.LayoutParams layoutParamsFotoContainer1 = (LinearLayout.LayoutParams) fotoContainer1.getLayoutParams();
-                    layoutParamsFotoContainer1.height = 0;
-                    fotoContainer1.setLayoutParams(layoutParamsFotoContainer1);
-                    fotoContainer1.setVisibility(View.INVISIBLE);
-                    LinearLayout.LayoutParams layoutParamsFotoContainer2 = (LinearLayout.LayoutParams) fotoContainer2.getLayoutParams();
-                    layoutParamsFotoContainer2.setMarginStart(200);
-                    layoutParamsFotoContainer2.setMarginEnd(0);
-                    fotoContainer2.setLayoutParams(layoutParamsFotoContainer2);
-
-                    LinearLayout.LayoutParams layoutParamsFotoContaine = (LinearLayout.LayoutParams) fotoContaine.getLayoutParams();
-                    layoutParamsFotoContaine.topMargin = 50;
-                    fotoContaine.setLayoutParams(layoutParamsFotoContaine);
+                    buttonNo.setTextSize(45);
+                    fotoExplanation2.setTextSize(45);
                 } else {
-                    responseContainer.setOrientation(LinearLayout.HORIZONTAL);
+
                 }
             }
         };
