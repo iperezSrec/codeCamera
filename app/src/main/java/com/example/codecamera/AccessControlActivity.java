@@ -223,8 +223,16 @@ public class AccessControlActivity extends AppCompatActivity {
                             }
                         }, 3000);
                     } else {
-                        Toast.makeText(AccessControlActivity.this, "Este botón no tiene una correcta configuración", Toast.LENGTH_SHORT).show();
-                    }
+                        messageTextView.setText("Este botón no tiene una correcta configuración");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(AccessControlActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }, 3000);
+                        }
                 }
 
                 @Override
